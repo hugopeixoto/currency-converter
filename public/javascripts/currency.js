@@ -3,19 +3,25 @@ var currencies = {};
 function add_currency(name, value) { currencies[name] = value; }
 
 function update_fields() {
-  var from = $('from').value;
+  var from = $('from').innerHTML;
   var from_rate = currencies[from];
   var amount = $('from_amount').value;
+
+  var to = $('to').innerHTML;
+  var to_rate = currencies[to];
+  $('to_amount').innerHTML = (amount * to_rate / from_rate).toFixed(2);
 
   $$('ul.to li.currency').each(function(e) {
     var field = e.select('span')[0];
     var to_rate = currencies[field.id];
-    e.select('span')[0].update(amount * to_rate / from_rate);
+    e.select('span')[0].update((amount * to_rate / from_rate).toFixed(2));
   });
 }
 
 function select_from(evt, e) {
-  $('from').value = e.select('h3')[0].innerHTML;
+  $('from').innerHTML = e.select('h3')[0].innerHTML;
+  $$('ul.from li.currency').each(function(e) { e.removeClassName('selected'); });
+  $(e).addClassName('selected');
   update_fields();
 }
 

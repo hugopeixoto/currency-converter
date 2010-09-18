@@ -1,5 +1,6 @@
 html, body {
-  font-family: Verdana, sans; }
+  font-family: Helvetica, Verdana;
+  background-color: #f4e9df; }
 
 h1 {
   width: 960px;
@@ -10,19 +11,62 @@ h1 {
   color: white;
   background-color: #333333; }
 
+h2 {
+  margin-left: 10px; }
+
 form {
-  margin: 0px auto;
+  margin: 100px auto 0px auto;
   width: 960px;
-  overflow: auto; }
+  overflow: auto;
+  background-color: white;
+  border: 3px solid #4f4e57;
+  padding: 30px; }
   form fieldset.from, form fieldset.to {
     padding: 0px;
     margin: 0px;
     border: none;
     width: 480px;
     float: left; }
+  form input#from_amount, form span#to_amount {
+    display: block;
+    float: left;
+    width: 160px;
+    padding: 0px 10px;
+    height: 2em;
+    line-height: 2em;
+    font-size: 1.5em;
+    margin: 0px 20px 0px 10px;
+    border: 1px solid #cccccc; }
+  form span#to_amount {
+    border: 1px solid white; }
+  form span#from, form span#to {
+    font-size: 1.5em;
+    line-height: 2em; }
 
-.currency {
-  background-color: #4e6b66;
-  color: white; }
-  .currency:hover {
-    background-color: #ed834e; }
+ul {
+  list-style-type: none;
+  padding: 0px 10px;
+  margin: 0px; }
+  ul li {
+    margin-bottom: 10px;
+    padding: 0px 10px;
+    width: 160px;
+    height: 4em;
+    line-height: 2em; }
+
+ul.from .currency {
+  background-color: white;
+  border: 1px solid #cccccc;
+  color: black; }
+  ul.from .currency:hover {
+    background-color: #c7ede8;
+    color: black;
+    border-color: #cccccc;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black; }
+  ul.from .currency.selected {
+    background-color: #66aef3;
+    color: white;
+    border-color: #cccccc;
+    border-top: 1px solid black;
+    border-left: 1px solid black; }

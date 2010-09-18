@@ -1,6 +1,7 @@
 
 html, body
-  font-family: Verdana, sans
+  font-family: Helvetica, Verdana
+  background-color: #F4E9DF
 
 h1
   width: 960px
@@ -12,11 +13,16 @@ h1
   color: white
   background-color: #333
 
+h2
+  margin-left: 10px
 
 form
-  margin: 0px auto
+  margin: 100px auto 0px auto
   width: 960px
   overflow: auto
+  background-color: white
+  border: 3px solid #4f4e57
+  padding: 30px
 
   fieldset.from, fieldset.to
     padding: 0px
@@ -25,8 +31,51 @@ form
     width: 480px
     float: left
 
-.currency
-  background-color: #4E6B66
-  color: white
+  input#from_amount, span#to_amount
+    display: block
+    float: left
+    width: 160px
+    padding: 0px 10px
+    height: 2em
+    line-height: 2em
+    font-size: 1.5em
+    margin: 0px 20px 0px 10px
+    border: 1px solid #ccc
+
+  span#to_amount
+    border: 1px solid white
+
+  span#from, span#to
+    font-size: 1.5em
+    line-height: 2em
+
+ul
+  list-style-type: none
+  padding: 0px 10px
+  margin: 0px
+  
+  li
+    margin-bottom: 10px
+    padding: 0px 10px
+    width: 160px
+    height: 4em
+    line-height: 2em
+
+ul.from .currency
+  background-color: white
+  border: 1px solid #ccc
+  color: black
+
   &:hover
-    background-color: #ED834E
+    background-color: #C7EDE8
+    color: black
+    border-color: #ccc
+    border-bottom: 1px solid black
+    border-right: 1px solid black
+
+  &.selected
+    background-color: #66AEF3
+    color: white
+    border-color: #ccc
+    border-top: 1px solid black
+    border-left:  1px solid black
