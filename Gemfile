@@ -10,7 +10,6 @@ gem 'haml'
 gem 'haml-rails'
 gem 'heroku'
 gem 'json'
-gem 'net/http'
 
 # Use unicorn as the web server
 # gem 'unicorn'
