@@ -19,18 +19,24 @@ function update_fields() {
 }
 
 function select_from(evt, e) {
-  $('from').innerHTML = e.select('h3')[0].innerHTML;
+  $('from').innerHTML = e.select('span.currency')[0].innerHTML;
   $$('ul.from li.currency').each(function(e) { e.removeClassName('selected'); });
+  $(e).addClassName('selected');
+  update_fields();
+}
+
+function select_to(evt, e) {
+  $('to').innerHTML = e.select('span.currency')[0].innerHTML;
+  $$('ul.to li.currency').each(function(e) { e.removeClassName('selected'); });
   $(e).addClassName('selected');
   update_fields();
 }
 
 Event.observe(window, 'load', function()
 {
+  $('from_amount').focus();
   Event.observe('from_amount', 'keyup', update_fields);
 
-  $$('ul.from li.currency').each(function (e)
-  {
-    Event.observe(e, 'click', function(elem) { return function (evt) { return select_from(evt, elem); } }(e));
-  });
+  $$('ul.to li.currency').each(function (e) { Event.observe(e, 'click', function(elem) { return function (evt) { return select_to(evt, elem); } }(e)); });
+  $$('ul.from li.currency').each(function (e) { Event.observe(e, 'click', function(elem) { return function (evt) { return select_from(evt, elem); } }(e)); });
 });

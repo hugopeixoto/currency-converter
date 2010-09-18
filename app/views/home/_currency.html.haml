@@ -1,5 +1,6 @@
-%h3= currency.name
 - if display
-  %p
-    Result:
-    %span{:id => currency.name} N/A
+  %span.value{:id => currency.name} N/A
+  %span.currency= currency.name
+
+-else
+  %span.currency= currency.name

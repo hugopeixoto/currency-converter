@@ -1,25 +1,25 @@
 
 = form_tag do
-  %fieldset.from
+  %fieldset
 
-    %h2 Convert from
+    %h2 From
 
     .from
       = text_field_tag 'from_amount', '1.00'
       %span#from EUR
       
-    %h2 Popular currencies
+    %h3 Popular currencies
     %ul.from
       = render :partial => 'home/currency_item', :collection => Currency.popular, :locals => { :display => false }
 
-  %fieldset.to
+  %fieldset
 
     %h2 To
     .to
-      %span#to_amount= "%.2f" % (1/Currency.find_by_name('EUR').rate)
-      %span#to USD
+      %span.value#to_amount= "%.2f" % (1/Currency.find_by_name('EUR').rate)
+      %span.currency#to USD
 
-    %h2 Popular currencies
+    %h3 Popular currencies
     %ul.to
       = render :partial => 'home/currency_item', :collection => Currency.popular, :locals => { :display => true }
 
