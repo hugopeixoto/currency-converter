@@ -1,0 +1,28 @@
+html, body {
+  font-family: Verdana, sans; }
+
+h1 {
+  width: 960px;
+  margin: 0px auto;
+  text-align: center;
+  color: #ebe1c5;
+  background-color: #4e6b66;
+  color: white;
+  background-color: #333333; }
+
+form {
+  margin: 0px auto;
+  width: 960px;
+  overflow: auto; }
+  form fieldset.from, form fieldset.to {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    width: 480px;
+    float: left; }
+
+.currency {
+  background-color: #4e6b66;
+  color: white; }
+  .currency:hover {
+    background-color: #ed834e; }

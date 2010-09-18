@@ -1,0 +1,29 @@
+%h1 Currencies
+
+= form_tag do
+  %fieldset.from
+    %label
+      amount
+      = text_field_tag 'from_amount', '1.00'
+
+    %label Convert from
+    = text_field_tag 'from', 'EUR'
+    
+    %h2 Popular currencies
+    %ul.from
+      = render :partial => 'home/currency_item', :collection => Currency.popular, :locals => { :display => false }
+
+  %fieldset.to
+
+    %label To
+    = text_field_tag 'to', 'USD'
+
+    %h2 Popular currencies
+    %ul.to
+      = render :partial => 'home/currency_item', :collection => Currency.popular, :locals => { :display => true }
+
+%script{:type => 'text/javascript'}
+  - @currencies.each do |currency|
+    = "add_currency('%s', %f);" % [currency.name, currency.rate]
+
+  = 'update_fields();'
