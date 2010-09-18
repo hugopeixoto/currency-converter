@@ -8,6 +8,9 @@ gem 'rails', '3.0.0'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'haml'
 gem 'haml-rails'
+gem 'heroku'
+gem 'json'
+gem 'net/http'
 
 # Use unicorn as the web server
 # gem 'unicorn'
