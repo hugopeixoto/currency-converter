@@ -9,7 +9,6 @@ load 'models/currency.rb'
 
 helpers Sinatra::Partials
 
-
 dbconfig = YAML.load(File.read('config/database.yml'))
 ActiveRecord::Base.establish_connection(dbconfig['production'])
 

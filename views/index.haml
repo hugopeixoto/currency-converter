@@ -36,5 +36,3 @@
 %script{:type => 'text/javascript'}
   - Currency.all.each do |currency|
     = "add_currency('%s', %f);" % [currency.name, currency.rate]
-
-  = 'update_fields();'
