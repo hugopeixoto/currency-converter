@@ -3,7 +3,7 @@ html, body {
   background-color: #f4e9df; }
 
 h1 {
-  width: 800px;
+  width: 700px;
   margin: 0px auto;
   text-align: center;
   color: #ebe1c5;
@@ -15,8 +15,17 @@ h2 {
   text-align: center;
   margin-bottom: 40px; }
 
+p.author {
+  color: #4F4E57;
+  margin: 30px auto 0px auto;
+  width: 700px;
+  text-align: right; }
+
+  p.author a { color: #66AEF3; }
+  p.author a:hover { color: white; background-color: #66AEF3; }
+
 form {
-  margin: 100px auto 0px auto;
+  margin: 50px auto 0px auto;
   width: 700px;
   overflow: auto; }
   form fieldset {
