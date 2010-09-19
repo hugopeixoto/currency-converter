@@ -13,9 +13,16 @@ ActiveRecord::Base.establish_connection(dbconfig['production'])
 
 task :cron do
 	url = "http://uk.finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote;currency=true?format=json"
+
+  print "Downloading rates..."
+  STDOUT.flush
   body = Net::HTTP.get_response(URI.parse(url)).body.gsub(/,\s*\]/, ']')
+  puts "\tdone."
 
 	result = JSON.parse(body)
+
+  print "Updating exchange rates..."
+  STDOUT.flush
 
   result["list"]["resources"].each do |r|
     resource = r["resource"]["fields"]
@@ -23,4 +30,6 @@ task :cron do
       Currency.find_by_name($~[1]).update_attributes(:rate => resource["price"])
     end
   end
+
+  puts "\tdone."
 end
