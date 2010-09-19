@@ -40,11 +40,11 @@ function select_to(evt, e) {
 Event.observe(window, 'load', function()
 {
   var parts = window.location.hash.substring(1).split(':');
-  if (parts[0].length > 0) select_from(null, $$('ul.from li.currency.' + parts[0])[0]);
-  if (parts[1].length > 0) select_to(null, $$('ul.to li.currency.' + parts[1])[0]);
-  if (parts[2].length > 0) $('from_amount').value = parts[2];
-  update_fields();
+  if (parts.length > 0 && parts[0].length > 0) select_from(null, $$('ul.from li.currency.' + parts[0])[0]);
+  if (parts.length > 1 && parts[1].length > 0) select_to(null, $$('ul.to li.currency.' + parts[1])[0]);
+  if (parts.length > 2 && parts[2].length > 0) $('from_amount').value = parts[2];
 
+  update_fields();
 
   $('from_amount').focus();
   Event.observe('from_amount', 'keyup', update_fields);
