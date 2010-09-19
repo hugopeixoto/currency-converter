@@ -1,0 +1,40 @@
+
+%form
+  %fieldset
+
+    %h2 From
+
+    .from
+      %input{:id => 'from_amount', :name => 'from_amount', :type => 'text', :value => '1.00'}
+      /= text_field_tag 'from_amount', '1.00'
+      %span#from EUR
+      
+    %h3 Popular currencies
+    %ul.from
+      = partial 'currency_item', :collection => Currency.popular, :locals => { :display => false }
+
+    %h3 Others
+    %ul.from
+      = partial 'currency_item', :collection => Currency.unpopular, :locals => { :display => false }
+
+  %fieldset
+
+    %h2 To
+    .to
+      %span.value#to_amount= "%.2f" % (1/Currency.find_by_name('EUR').rate)
+      %span.currency#to USD
+
+    %h3 Popular currencies
+    %ul.to
+      = partial 'currency_item', :collection => Currency.popular, :locals => { :display => true }
+
+    %h3 Others
+    %ul.to
+      = partial 'currency_item', :collection => Currency.unpopular, :locals => { :display => true }
+
+
+%script{:type => 'text/javascript'}
+  - Currency.all.each do |currency|
+    = "add_currency('%s', %f);" % [currency.name, currency.rate]
+
+  = 'update_fields();'
