@@ -11,33 +11,32 @@
 
     .from
       %input{:id => 'from_amount', :name => 'from_amount', :type => 'text', :value => '10.0'}
-      /= text_field_tag 'from_amount', '1.00'
       %span#from EUR
       
     %h3 Popular currencies
     %ul.from
-      = partial 'currency_item', :collection => Currency.popular, :locals => { :display => false }
+      = partial 'currency_item', :collection => Currency.known.popular, :locals => { :display => false }
 
     %h3 Others
     %ul.from
-      = partial 'currency_item', :collection => Currency.unpopular, :locals => { :display => false }
+      = partial 'currency_item', :collection => Currency.known.unpopular, :locals => { :display => false }
 
   %fieldset
 
     %h2 To
     .to
-      %span.value#to_amount= "%.2f" % (10.0 / Currency.find_by_shortname('EUR').rate)
+      %span.value#to_amount= "%.2f" % (10.0 / Currency.known.find_by_shortname('EUR').rate)
       %span.currency#to USD
 
     %h3 Popular currencies
     %ul.to
-      = partial 'currency_item', :collection => Currency.popular, :locals => { :display => true }
+      = partial 'currency_item', :collection => Currency.known.popular, :locals => { :display => true }
 
     %h3 Others
     %ul.to
-      = partial 'currency_item', :collection => Currency.unpopular, :locals => { :display => true }
+      = partial 'currency_item', :collection => Currency.known.unpopular, :locals => { :display => true }
 
 
 %script{:type => 'text/javascript'}
-  - Currency.all.each do |currency|
+  - Currency.known.each do |currency|
     = "add_currency('%s', %f);" % [currency.shortname, currency.rate]

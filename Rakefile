@@ -25,6 +25,10 @@ task :cron do
   print "Updating exchange rates..."
   STDOUT.flush
 
+  Currency.all.each do |currency|
+    currency.update_attributes(:rate => nil)
+  end
+
   Currency.find_by_shortname('USD').update_attributes(:rate => 1.0)
 
   result["list"]["resources"].each do |r|
@@ -43,7 +47,7 @@ task :bootstrap do
   result = JSON.parse(File.open('config/currencies.json').read)
 
   result.each do |r|
-    Currency.create!(:longname => r["longname"], :shortname => r["shortname"], :popular => r["highlight"] || false, :rate => 1.0)
+    Currency.create!(:longname => r["longname"], :shortname => r["shortname"], :popular => r["highlight"] || false)
   end
 
   Rake::Task[:cron].invoke
