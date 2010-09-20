@@ -1,6 +1,8 @@
 - if display
-  %span.value{:id => currency.name} N/A
-  %span.currency= currency.name
+  %span.value{:id => currency.shortname} N/A
+  %span.currency= currency.shortname
+  %span.label= currency.longname
 
 -else
-  %span.currency= currency.name
+  %span.currency= currency.shortname
+  %span.label= currency.longname

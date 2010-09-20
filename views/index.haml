@@ -26,7 +26,7 @@
 
     %h2 To
     .to
-      %span.value#to_amount= "%.2f" % (10.0 / Currency.find_by_name('EUR').rate)
+      %span.value#to_amount= "%.2f" % (10.0 / Currency.find_by_shortname('EUR').rate)
       %span.currency#to USD
 
     %h3 Popular currencies
@@ -40,4 +40,4 @@
 
 %script{:type => 'text/javascript'}
   - Currency.all.each do |currency|
-    = "add_currency('%s', %f);" % [currency.name, currency.rate]
+    = "add_currency('%s', %f);" % [currency.shortname, currency.rate]

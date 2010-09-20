@@ -1,4 +1,5 @@
 class Currency < ActiveRecord::Base
-  scope :popular, :conditions => { :popular => true }
-  scope :unpopular, :conditions => { :popular => false }
+  default_scope where('rate IS NOT NULL')
+  scope :popular, where('popular = ?', true)
+  scope :unpopular, where('popular = ?', false)
 end

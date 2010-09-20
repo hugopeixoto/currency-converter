@@ -6,11 +6,12 @@ require 'rake'
 require 'active_record'
 require 'net/http'
 
-load 'models/currency.rb'
-
 dbconfig = YAML.load(File.read('config/database.yml'))
 ActiveRecord::Base.establish_connection(dbconfig['production'])
 
+load 'models/currency.rb'
+
+desc "Cron job to update the exchange rates"
 task :cron do
 	url = "http://uk.finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote;currency=true?format=json"
 
@@ -24,12 +25,36 @@ task :cron do
   print "Updating exchange rates..."
   STDOUT.flush
 
+  Currency.find_by_shortname('USD').update_attributes(:rate => 1.0)
+
   result["list"]["resources"].each do |r|
     resource = r["resource"]["fields"]
     if /USD\/(.*)/.match(resource["name"])
-      Currency.find_by_name($~[1]).update_attributes(:rate => resource["price"])
+      currency = Currency.find_by_shortname($~[1])
+      currency.update_attributes(:rate => resource["price"]) unless currency.nil?
     end
   end
 
   puts "\tdone."
 end
+
+desc "Bootstrap the currency database."
+task :bootstrap do
+  result = JSON.parse(File.open('config/currencies.json').read)
+
+  result.each do |r|
+    Currency.create!(:longname => r["longname"], :shortname => r["shortname"], :popular => r["highlight"] || false, :rate => 1.0)
+  end
+
+  Rake::Task[:cron].invoke
+end
+
+namespace :db do
+  desc "Migrate the database"
+  task :migrate do
+    #ActiveRecord::Base.logger = Logger.new(STDOUT)
+    ActiveRecord::Migration.verbose = true
+    ActiveRecord::Migrator.migrate("db/migrate")
+  end
+end
+
