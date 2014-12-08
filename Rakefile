@@ -1,62 +1,52 @@
-# Add your own tasks in files placed in lib/tasks ending in .rake,
-# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
-
 require 'rubygems'
 require 'rake'
 require 'active_record'
 require 'net/http'
+require 'yaml'
+require 'json'
 
 dbconfig = YAML.load(File.read('config/database.yml'))
 ActiveRecord::Base.establish_connection(dbconfig['production'])
 
 load 'models/currency.rb'
 
-desc "Cron job to update the exchange rates"
-task :cron do
-	url = "http://uk.finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote;currency=true?format=json"
+namespace :currency do
+  desc "Load currencies base information."
+  task :create do
+    result = JSON.parse(File.open('config/currencies.json').read)
 
-  print "Downloading rates..."
-  STDOUT.flush
-  body = Net::HTTP.get_response(URI.parse(url)).body.gsub(/,\s*\]/, ']')
-  puts "\tdone."
+    result.each do |r|
+      Currency.where(shortname: r["shortname"]).
+        first_or_create!.
+        update_attributes!(longname: r["longname"], popular: r["highlight"] || false)
+    end
 
-	result = JSON.parse(body)
-
-  print "Updating exchange rates..."
-  STDOUT.flush
-
-  Currency.all.each do |currency|
-    currency.update_attributes(:rate => nil)
+    Currency.where.not(shortname: result.map {|r| r["shortname"] }).destroy_all
   end
 
-  Currency.find_by_shortname('USD').update_attributes(:rate => 1.0)
+  desc "Cron job to update the exchange rates"
+  task :update => [:create] do
+    url = "https://uk.finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote;currency=true?format=json"
 
-  result["list"]["resources"].each do |r|
-    resource = r["resource"]["fields"]
-    if /USD\/(.*)/.match(resource["name"])
-      currency = Currency.find_by_shortname($~[1])
-      currency.update_attributes(:rate => resource["price"]) unless currency.nil?
+    body = Net::HTTP.get_response(URI.parse(url)).body
+    result = JSON.parse(body)
+
+    Currency.update_all(rate: nil)
+    Currency.where(shortname: 'USD').update_all(rate: 1.0)
+
+    result["list"]["resources"].each do |r|
+      resource = r["resource"]["fields"]
+      if /USD\/(.*)/.match(resource["name"])
+        currency = Currency.where(shortname: $~[1]).first
+        currency.update_attributes!(rate: resource["price"]) unless currency.nil?
+      end
     end
   end
-
-  puts "\tdone."
-end
-
-desc "Bootstrap the currency database."
-task :bootstrap do
-  result = JSON.parse(File.open('config/currencies.json').read)
-
-  result.each do |r|
-    Currency.create!(:longname => r["longname"], :shortname => r["shortname"], :popular => r["highlight"] || false)
-  end
-
-  Rake::Task[:cron].invoke
 end
 
 namespace :db do
   desc "Migrate the database"
   task :migrate do
-    #ActiveRecord::Base.logger = Logger.new(STDOUT)
     ActiveRecord::Migration.verbose = true
     ActiveRecord::Migrator.migrate("db/migrate")
   end

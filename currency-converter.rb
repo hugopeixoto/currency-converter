@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+require 'yaml'
 
 require 'haml'
 require 'active_record'
@@ -16,7 +17,7 @@ helpers Sinatra::Partials
 
 # Sinatra configuration
 set :views, File.dirname(__FILE__) + "/views"
-set :public, File.dirname(__FILE__) + '/public'
+set :public_dir, File.dirname(__FILE__) + '/public'
 set :run, true
 enable :static
 

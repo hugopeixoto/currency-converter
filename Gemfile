@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
+gem 'rake'
 gem 'sinatra'
 gem 'activerecord'
-gem 'sqlite3-ruby', :require => 'sqlite3'
+gem 'sqlite3'
 gem 'haml'
-gem 'heroku'
