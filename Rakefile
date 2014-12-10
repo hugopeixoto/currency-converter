@@ -5,6 +5,8 @@ require 'net/http'
 require 'yaml'
 require 'json'
 
+Encoding.default_external = "utf-8"
+
 dbconfig = YAML.load(File.read('config/database.yml'))
 ActiveRecord::Base.establish_connection(dbconfig['production'])
 
