@@ -1,0 +1,86 @@
+
+<%= form_tag do %>
+  <fieldset>
+    <h2>From</h2>
+
+    <div class="from">
+      <%= text_field_tag 'from_amount', '1.00' %>
+      <span id="from">EUR</span>
+    </div>
+
+    <h3>Popular currencies</h3>
+    <ul class="from">
+      <%= render :partial => 'home/currency_item', :collection => Currency.popular, :locals => { :display => false } %>
+    </ul>
+
+    <h3>Others</h3>
+    <ul class="from">
+      <%= render :partial => 'home/currency_item', :collection => Currency.unpopular, :locals => { :display => false } %>
+    </ul>
+  </fieldset>
+
+  <fieldset>
+    <h2>To</h2>
+    <div class="to">
+      <span class="value" id="to_amount"><%= "%.2f" % (Currency.find_by_name('USD').rate) %></span>
+      <span class="currency" id="to">USD</span>
+    </div>
+
+    <h3>Popular currencies</h3>
+    <ul class="to">
+      <%= render :partial => 'home/currency_item', :collection => Currency.popular, :locals => { :display => true } %>
+    </ul>
+
+    <h3>Others</h3>
+    <ul class="to">
+      <%= render :partial => 'home/currency_item', :collection => Currency.unpopular, :locals => { :display => true } %>
+    </ul>
+  </fieldset>
+<% end %>
+
+<script type='text/javascript'>
+  function update() {
+    let from = document.getElementById("from").innerHTML;
+    let to = document.getElementById("to").innerHTML;
+    let amount = document.getElementById("from_amount").value;
+    let result = (amount * window.currencies[to] / window.currencies[from]).toFixed(2);
+
+    document.getElementById("to_amount").innerHTML = result;
+  }
+
+  function select_from(evt) {
+    let target = evt.currentTarget;
+    let currency = target.getElementsByClassName("currency")[0].innerHTML;
+    document.getElementById("from").innerHTML = currency;
+    document.querySelectorAll(".selected").forEach(function(e) { e.classList.remove("selected"); })
+    target.classList.add("selected");
+    update();
+  }
+
+  function select_to(evt) {
+    let target = evt.currentTarget;
+    let currency = target.getElementsByClassName("currency")[0].innerHTML;
+    document.getElementById("to").innerHTML = currency;
+    document.querySelectorAll(".selected").forEach(function(e) { e.classList.remove("selected"); })
+    target.classList.add("selected");
+    update();
+  }
+
+  window.currencies = {};
+  <%- @currencies.each do |currency| %>
+    window.currencies.<%= currency.name %> = <%= currency.rate %>;
+  <% end %>
+
+  update();
+
+  document.getElementById("from_amount").focus();
+  document.getElementById("from_amount").addEventListener('keyup', update);
+
+  document.querySelectorAll("ul.to li.currency").forEach(function(element) {
+    element.addEventListener('click', select_to);
+  });
+
+  document.querySelectorAll("ul.from li.currency").forEach(function(element) {
+    element.addEventListener('click', select_from);
+  });
+</script>

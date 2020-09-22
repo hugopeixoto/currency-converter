@@ -1,4 +1,4 @@
 class Currency < ActiveRecord::Base
-  scope :popular, :conditions => { :popular => true }
-  scope :unpopular, :conditions => { :popular => false }
+  scope :popular, -> { where(popular: true) }
+  scope :unpopular, -> { where(popular: false) }
 end

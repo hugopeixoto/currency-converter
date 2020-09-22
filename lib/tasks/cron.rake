@@ -1,18 +1,22 @@
 require 'json'
 require 'net/http'
 
-task :cron => :environment do
-	url = "http://uk.finance.yahoo.com/webservice/v1/symbols/allcurrencies/quote;currency=true?format=json"
-  body = Net::HTTP.get_response(URI.parse(url)).body.gsub(/,\s*\]/, ']')
+task cron: :environment do
+  result = "https://api.openrates.io/latest?base=EUR"
+    .then(&URI.method(:parse))
+    .then(&Net::HTTP.method(:get_response))
+    .body
+    .then(&JSON.method(:parse))
 
-	result = JSON.parse(body)
-  puts result["list"]["resources"]
+  Currency.transaction do
+    Currency.delete_all
 
-  Currency.delete_all
-  result["list"]["resources"].each do |r|
-    resource = r["resource"]["fields"]
-    if /USD\/(.*)/.match(resource["name"])
-      Currency.create(:name => $~[1], :rate => resource["price"])
+    Currency.create(name: "EUR", rate: 1.0)
+    result["rates"].each do |name, rate|
+      Currency.create(name: name, rate: rate)
     end
+
+    Currency.where(name: %w[EUR USD JPY GBP]).update(popular: true)
+    Currency.where.not(name: %w[EUR USD JPY GBP]).update(popular: false)
   end
 end
